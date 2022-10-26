@@ -1,8 +1,9 @@
 from flask import Flask
 from flask import request
-from modules import get_dimensions as dim
-from modules import get_incomes as income
-from modules import get_population as pop
+from modules.get import get_dimensions as dim
+from modules.get import get_incomes_ine as income_ine
+from modules.get import get_population_ine as pop_ine
+from modules.get import get_incomes_aeat as income_aeat
 
  
 app = Flask(__name__)
@@ -31,81 +32,100 @@ def api_regions():
     data = dim.get_regions()
     return data
 
-# get ages
-@app.route('/ages')
-def api_ages():
-    data = dim.get_ages()
-    return data
-
-# get genres
-@app.route('/genres')
-def api_genres():
-    data = dim.get_genres()
-    return data
-
-# get indicators income
+# get regions
 @app.route('/indicators_incomes')
 def api_indicators_incomes():
     data = dim.get_indicators_incomes()
     return data
 
-# get incomes year for city by city, province or region
-@app.route('/income/<year>')
-@app.route('/income/<year>/city/<city>')
-@app.route('/income/<year>/province/<province>')
-@app.route('/income/<year>/region/<region>')
-def api_incomes_city(year, city=None, province=None, region=None):
+# get years incomes aeat
+@app.route('/incomes_aeat/years')
+def api_incomes_aeat_years():
+    # get data
+    data = income_aeat.get_years()
+    return data
+
+# get incomes aeat year for city
+@app.route('/incomes_aeat/<year>')
+@app.route('/incomes_aeat/<year>/city/<city>')
+@app.route('/incomes_aeat/<year>/province/<province>')
+@app.route('/incomes_aeat/<year>/region/<region>')
+def api_incomes_aeat_city(year, city=None, province=None, region=None):
     # params
-    id_indicator = request.args.get('id_indicator', None, type=str)
-    id_normalized = request.args.get('id_normalized', 'no', type=str)
+    id_normalized = request.args.get('normalized', 'no', type=str)
     
     # get data
-    data = income.get_incomes(year=year, id_city=city, id_province=province, id_region=region, id_indicator=id_indicator, normalized=id_normalized)
+    data = income_aeat.get_incomes(year=year, id_city=city, id_province=province, id_region=region, normalized=id_normalized)
 
     return data
 
-# get population year for city by city, province or region
-@app.route('/population/<year>')
-@app.route('/population/<year>/city/<city>')
-@app.route('/population/<year>/province/<province>')
-@app.route('/population/<year>/region/<region>')
-def api_population_city(year, city=None, province=None, region=None):
+# get years incomes ine
+@app.route('/incomes_ine/years')
+def api_incomes_ine_years():
+    # get data
+    data = income_ine.get_years()
+    return data
+
+# get incomes ine year for city
+@app.route('/incomes_ine/<year>')
+@app.route('/incomes_ine/<year>/city/<city>')
+@app.route('/incomes_ine/<year>/province/<province>')
+@app.route('/incomes_ine/<year>/region/<region>')
+def api_incomes_ine_city(year, city=None, province=None, region=None):
     # params
-    gr_gender = request.args.get('gr_gender', 'no', type=str)
-    gr_age = request.args.get('gr_age', 'no', type=str)
-    id_normalized = request.args.get('id_normalized', 'no', type=str)
+    id_normalized = request.args.get('normalized', 'no', type=str)
     
     # get data
-    data = pop.get_population(year=year, id_city=city, id_province=province, id_region=region, gr_gender=gr_gender, gr_age=gr_age, normalized=id_normalized)
+    data = income_ine.get_incomes(year=year, id_city=city, id_province=province, id_region=region, normalized=id_normalized)
 
     return data
 
-# get population year for provinces by province or region
-@app.route('/population/<year>/provinces')
-@app.route('/population/<year>/provinces/province/<province>')
-@app.route('/population/<year>/provinces/region/<region>')
-def api_population_province(year, province=None, region=None):
+# get years population ine
+@app.route('/population_ine/years')
+def api_population_ine_years():
+    # get data
+    data = pop_ine.get_years()
+    return data
+
+# get population year for city
+@app.route('/population_ine/<year>')
+@app.route('/population_ine/<year>/city/<city>')
+@app.route('/population_ine/<year>/province/<province>')
+@app.route('/population_ine/<year>/region/<region>')
+def api_population_ine_city(year, city=None, province=None, region=None):
     # params
-    gr_gender = request.args.get('gr_gender', 'no', type=str)
-    gr_age = request.args.get('gr_age', 'no', type=str)
-    id_normalized = request.args.get('id_normalized', 'no', type=str)
+    id_normalized = request.args.get('normalized', 'no', type=str)
+    id_age = request.args.get('age', 'no', type=str)
     
     # get data
-    data = pop.get_population(year=year, id_province=province, id_region=region, gr_province='yes', gr_gender=gr_gender, gr_age=gr_age, normalized=id_normalized)
+    data = pop_ine.get_population(year=year, id_city=city, id_province=province, id_region=region, age=id_age, normalized=id_normalized)
+
+    return data
+
+# get population year for provinces
+@app.route('/population_ine/<year>/provinces')
+@app.route('/population_ine/<year>/provinces/province/<province>')
+@app.route('/population_ine/<year>/provinces/region/<region>')
+def api_population_ine_province(year, province=None, region=None):
+    # params
+    id_normalized = request.args.get('normalized', 'no', type=str)
+    id_age = request.args.get('age', 'no', type=str)
+    
+    # get data
+    data = pop_ine.get_population(year=year, id_province=province, id_region=region, age=id_age, normalized=id_normalized)
     
     return data
 
-# get population year for regions by region
-@app.route('/population/<year>/regions')
-@app.route('/population/<year>/regions/region/<region>')
-def api_population_region(year, region=None):
+# get population year for regions
+@app.route('/population_ine/<year>/regions')
+@app.route('/population_ine/<year>/regions/region/<region>')
+def api_population_ine_region(year, region=None):
     # params
-    gr_gender = request.args.get('gr_gender', 'no', type=str)
-    gr_age = request.args.get('gr_age', 'no', type=str)
-    id_normalized = request.args.get('id_normalized', 'no', type=str)
+    id_normalized = request.args.get('normalized', 'no', type=str)
+    id_age = request.args.get('age', 'no', type=str)
     
     # get data
-    data = pop.get_population(year=year, id_region=region, gr_region='yes', gr_gender=gr_gender, gr_age=gr_age, normalized=id_normalized)
+    data = pop_ine.get_population(year=year, id_region=region, age=id_age, normalized=id_normalized)
 
     return data
 

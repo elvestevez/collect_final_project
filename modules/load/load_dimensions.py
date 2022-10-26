@@ -1,7 +1,7 @@
 import os
 import pandas as pd
-from modules import to_db as db
-from modules import db_integrity as db_int
+from modules.db import to_db as db
+from modules.db import db_integrity as db_int
 
 
 CITY_PATH = './data/dimensions/cities.csv'
@@ -10,14 +10,12 @@ PROVINCE_PATH = './data/dimensions/provinces.csv'
 PROVINCE_TABLE = 'PROVINCE'
 REGION_PATH = './data/dimensions/regions.csv'
 REGION_TABLE = 'REGION'
+INDICATOR_INCOME_PATH = './data/dimensions/indicator_income.csv'
+INDICATOR_INCOME_TABLE = 'INDICATOR_INCOME'
 AGE_PATH = './data/dimensions/ages.csv'
 AGE_TABLE = 'AGE'
 GENDER_PATH = './data/dimensions/genres.csv'
 GENDER_TABLE = 'GENDER'
-INDICATOR_INCOME_PATH = './data/dimensions/indicator_income.csv'
-INDICATOR_INCOME_TABLE = 'INDICATOR_INCOME'
-YEAR_PATH = './data/dimensions/years.csv'
-YEAR_TABLE = 'YEAR'
 
 
 # read dimension file
@@ -94,37 +92,13 @@ def load_regions():
     # save regions in db
     save_dimension(df_regions, REGION_TABLE)
 
-# read and save in db ages
-def load_ages():
-    # read file ages
-    df_ages = read_dimension(AGE_PATH)
+# read and save in db indicators incomes
+def load_indicators_incomes():
+    # read file indicators incomes
+    df_ii = read_dimension(INDICATOR_INCOME_PATH)
     
-    # save regions in db
-    save_dimension(df_ages, AGE_TABLE)
-
-# read and save in db genres
-def load_genres():
-    # read file genres
-    df_genres = read_dimension(GENDER_PATH)
-    
-    # save genres in db
-    save_dimension(df_genres, GENDER_TABLE)
-
-# read and save in db indicator incomes
-def load_indicator_incomes():
-    # read file indicator incomes
-    df_ind_in = read_dimension(INDICATOR_INCOME_PATH)
-    
-    # save indicator incomes in db
-    save_dimension(df_ind_in, INDICATOR_INCOME_TABLE)
-
-# read and save in db years
-def load_years():
-    # read file years
-    df_y = read_dimension(YEAR_PATH)
-    
-    # save indicator incomes in db
-    save_dimension(df_y, YEAR_TABLE)
+    # save indicators incomes in db
+    save_dimension(df_ii, INDICATOR_INCOME_TABLE)
 
 # load dimensions
 def load_dimensions():
@@ -134,14 +108,8 @@ def load_dimensions():
     load_provinces()
     # cities
     load_cities()
-    # ages
-    load_ages()
-    # genres
-    load_genres()
-    # indicator incomes
-    load_indicator_incomes()
-    # years
-    load_years()
+    # indicators incomes
+    load_indicators_incomes()
 
 # check integrity dimensions
 def check_integrity_dimensions():

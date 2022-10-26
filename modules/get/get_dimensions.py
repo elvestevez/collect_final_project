@@ -28,7 +28,7 @@ def get_dimension(engineDB, name):
     SELECT * 
     FROM {name} 
     '''
-
+    
     #print(query)
 
     json_data = pd.read_sql_query(query, engineDB).to_json()
@@ -60,22 +60,6 @@ def get_regions():
     engineDB = connect_DB()
     # select
     result = get_dimension(engineDB, REGION)
-    return result
-
-# get ages
-def get_ages():
-    # connect
-    engineDB = connect_DB()
-    # select
-    result = get_dimension(engineDB, AGE)
-    return result
-
-# get genres
-def get_genres():
-    # connect
-    engineDB = connect_DB()
-    # select
-    result = get_dimension(engineDB, GENDER)
     return result
 
 # get indicators incomes

@@ -1,11 +1,11 @@
 import os
 import pandas as pd
-from modules import to_db as db
-from modules import db_integrity as db_int
+from modules.db import to_db as db
+from modules.db import db_integrity as db_int
 
 
-POPULATION_PATH = './data/population/'
-POPULATION_TABLE = 'POPULATION'
+POPULATION_PATH = './data/population_ine/'
+POPULATION_TABLE = 'POPULATION_INE'
 
 
 # save population in db
@@ -26,8 +26,7 @@ def data_clean_population(df_in, year):
     df_pop['Year'] = df_pop['Periodo'].str.split(' ').str[-1]
     
     # set date
-    df_pop['Day'] = 1
-    df_pop['Month'] = 1
+    df_pop['Date'] = '01/01/' + df_pop['Year'] 
     
     # convert Year to int
     df_pop['Year'] = df_pop['Year'].astype('int')
@@ -51,10 +50,39 @@ def data_clean_population(df_in, year):
     df_pop.dropna(inplace=True)
 
     # rename and reorder cols
-    cols = ['Id_city', 'Id_gender', 'Id_age', 'Day', 'Month', 'Year', 'Total']
+    df_pop['Total'] = df_pop['Total'].astype('int')
+    cols = ['Id_city', 'Id_gender', 'Id_age', 'Date', 'Year', 'Total']
     df_pop = df_pop[cols]
+
+    # pivot by gender
+    df_pop_g = df_pop.pivot_table('Total', 
+                                  ['Id_city', 'Id_age', 'Date', 'Year'], 
+                                  'Id_gender').reset_index().rename(columns={'F': 'Female', 'M': 'Male'})
     
-    return df_pop
+    # pivot by age
+    df_pop_a = df_pop_g.pivot_table(['Female', 'Male'], ['Id_city', 'Date', 'Year'], 'Id_age').reset_index()
+
+    # rename cols
+    df_pop_a.columns = ["_".join(pair) for pair in df_pop_a.columns]
+
+    df_pop_a.rename(columns={'Id_city_': 'Id_city', 'Year_': 'Year', 'Date_': 'Date'}, inplace=True)
+
+    # total and total gender
+    list_name_f = []
+    list_name_m = []
+    for c in df_pop.columns:
+        if c.startswith('Female'):
+            list_name_f.append(c)
+        if c.startswith('Male'):
+            list_name_m.append(c)
+
+    # total gender
+    df_pop_a['Total_F'] = df_pop_a.loc[:, list_name_f].sum(axis=1)
+    df_pop_a['Total_M'] = df_pop_a.loc[:, list_name_m].sum(axis=1)
+    # total
+    df_pop_a['Total'] = df_pop_a['Total_F'] + df_pop_a['Total_M']
+    
+    return df_pop_a
 
 # clean population (national) df
 def data_clean_national_population(df_in, year):
@@ -68,8 +96,7 @@ def data_clean_national_population(df_in, year):
     df_pop['Year'] = df_pop['Periodo'].str.split(' ').str[-1]
     
     # set date
-    df_pop['Day'] = 1
-    df_pop['Month'] = 1
+    df_pop['Date'] = '01/01/' + df_pop['Year'] 
     
     # convert Year to int
     df_pop['Year'] = df_pop['Year'].astype('int')
@@ -93,10 +120,39 @@ def data_clean_national_population(df_in, year):
     df_pop.dropna(inplace=True)
 
     # rename and reorder cols
-    cols = ['Id_city', 'Id_gender', 'Id_age', 'Day', 'Month', 'Year', 'Total']
+    df_pop['Total'] = df_pop['Total'].astype('int')
+    cols = ['Id_city', 'Id_gender', 'Id_age', 'Date', 'Year', 'Total']
     df_pop = df_pop[cols]
+
+    # pivot by gender
+    df_pop_g = df_pop.pivot_table('Total', 
+                                  ['Id_city', 'Id_age', 'Date', 'Year'], 
+                                  'Id_gender').reset_index().rename(columns={'F': 'Female', 'M': 'Male'})
     
-    return df_pop
+    # pivot by age
+    df_pop_a = df_pop_g.pivot_table(['Female', 'Male'], ['Id_city', 'Date', 'Year'], 'Id_age').reset_index()
+
+    # rename cols
+    df_pop_a.columns = ["_".join(pair) for pair in df_pop_a.columns]
+
+    df_pop_a.rename(columns={'Id_city_': 'Id_city', 'Year_': 'Year', 'Date_': 'Date'}, inplace=True)
+
+    # total and total gender
+    list_name_f = []
+    list_name_m = []
+    for c in df_pop_a.columns:
+        if c.startswith('Female'):
+            list_name_f.append(c)
+        if c.startswith('Male'):
+            list_name_m.append(c)
+
+    # total gender
+    df_pop_a['Total_F'] = df_pop_a.loc[:, list_name_f].sum(axis=1)
+    df_pop_a['Total_M'] = df_pop_a.loc[:, list_name_m].sum(axis=1)
+    # total
+    df_pop_a['Total'] = df_pop_a['Total_F'] + df_pop_a['Total_M']
+    
+    return df_pop_a
 
 # read population file
 def read_population(file, year):
@@ -121,22 +177,16 @@ def load_population(year):
     
     # save population in db
     print(len(df_population))
-    name_table = year + '_' + POPULATION_TABLE
-    save_population(df_population, name_table)
+    #name_table = year + POPULATION_TABLE
+    save_population(df_population, POPULATION_TABLE)
 
 # check integrity incomes
 def check_integrity_population(year):
-    table_name = year + '_' + POPULATION_TABLE
-    msg = f'Integrity population {table_name}: '
-    city_ok = db_int.integrity_city(table_name)
-    ages_ok = db_int.integrity_age(table_name)
-    gend_ok = db_int.integrity_gender(table_name)
-    if city_ok and ages_ok and gend_ok:
+    #table_name = year + POPULATION_TABLE
+    msg = f'Integrity population {POPULATION_TABLE} year {year}: '
+    city_ok = db_int.integrity_city(POPULATION_TABLE, year)
+    if city_ok:
         msg = msg + '\n   Ok'
     if not city_ok:
         msg = msg + '\n   Error cities'
-    if not ages_ok:
-        msg = msg + '\n   Error ages'
-    if not gend_ok:
-        msg = msg + '\n   Error genres'
     return msg
