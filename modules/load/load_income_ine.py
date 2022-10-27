@@ -4,8 +4,8 @@ from modules.db import to_db as db
 from modules.db import db_integrity as db_int
 
 
-INCOMES_PATH = './data/incomes_ine/'
-INCOMES_TABLE = 'INCOMES_INE'
+INCOME_PATH = './data/income_ine/'
+INCOME_TABLE = 'INCOME_INE'
 
 
 # save income in db
@@ -67,13 +67,13 @@ def read_incomes(file, year):
 # read and save in db incomes
 def load_incomes(year):
     # income files
-    files = os.listdir(INCOMES_PATH)
+    files = os.listdir(INCOME_PATH)
     
     # df final
     df_incomes = pd.DataFrame([])
     for f in files:
         # read file income
-        df_income = read_incomes(INCOMES_PATH + f, year)
+        df_income = read_incomes(INCOME_PATH + f, year)
         # join incomes
         df_incomes = pd.concat([df_incomes, df_income])
     
@@ -89,18 +89,18 @@ def load_incomes(year):
     # save incomes in db
     print(len(df_incomes))
     #name_table = year + INCOMES_TABLE
-    save_incomes(df_incomes, INCOMES_TABLE)
+    save_incomes(df_incomes, INCOME_TABLE)
 
 # check integrity incomes
 def check_integrity_incomes(year):
-    table_name = year + INCOMES_TABLE
-    msg = f'Integrity incomes {INCOMES_TABLE} year {year}: '
-    city_ok = db_int.integrity_city(INCOMES_TABLE, year)
-    indi_ok = db_int.integrity_indicator_incomes(INCOMES_TABLE, year)
+    table_name = year + INCOME_TABLE
+    msg = f'Integrity income {INCOME_TABLE} year {year}: '
+    city_ok = db_int.integrity_city(INCOME_TABLE, year)
+    indi_ok = db_int.integrity_indicator_incomes(INCOME_TABLE, year)
     if city_ok and indi_ok:
         msg = msg + '\n   Ok'
     if not city_ok:
         msg = msg + '\n   Error cities'
     if not indi_ok:
-        msg = msg + '\n   Error indicators incomes'
+        msg = msg + '\n   Error indicators income'
     return msg

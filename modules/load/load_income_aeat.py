@@ -8,7 +8,7 @@ from modules.db import db_integrity as db_int
 URL_2020 = 'https://www.agenciatributaria.es/AEAT/Contenidos_Comunes/La_Agencia_Tributaria/Estadisticas/Publicaciones/sites/irpfmunicipios/2020/jrubikf7024f7e68a6d19091b823f761818f14de77d7950.html'
 URL_2019 = 'https://www.agenciatributaria.es/AEAT/Contenidos_Comunes/La_Agencia_Tributaria/Estadisticas/Publicaciones/sites/irpfmunicipios/2019/jrubikf74b3dca9af01b51cabd6d5603e0e16daecd1a97c.html'
 URL_2018 = 'https://www.agenciatributaria.es/AEAT/Contenidos_Comunes/La_Agencia_Tributaria/Estadisticas/Publicaciones/sites/irpfmunicipios/2018/jrubik7fe28e5d4daeab97eaf47efe29f0716914ab405e.html'
-INCOMES_TABLE = 'INCOMES_AEAT'
+INCOME_TABLE = 'INCOME_AEAT'
 
 
 # save income in db
@@ -101,13 +101,13 @@ def load_incomes(year):
     # save incomes in db
     print(len(df_incomes))
     #name_table = year + '_' + INCOMES_TABLE
-    save_incomes(df_incomes, INCOMES_TABLE)
+    save_incomes(df_incomes, INCOME_TABLE)
 
 # check integrity incomes
 def check_integrity_incomes(year):
-    #table_name = year + '_' + INCOMES_TABLE
-    msg = f'Integrity incomes {INCOMES_TABLE} year {year}: '
-    city_ok = db_int.integrity_city(INCOMES_TABLE, year)
+    #table_name = year + '_' + INCOME_TABLE
+    msg = f'Integrity income {INCOME_TABLE} year {year}: '
+    city_ok = db_int.integrity_city(INCOME_TABLE, year)
     if city_ok:
         msg = msg + '\n   Ok'
     if not city_ok:

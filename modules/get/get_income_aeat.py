@@ -6,8 +6,7 @@ import json
 
 DB_SQLITE = './db/db_collect.db'
 
-INCOMES_TABLE = 'INCOMES_INE'
-POPULATION_TABLE = 'POPULATION_INE'
+INCOME_TABLE = 'INCOME_AEAT'
 
 
 # connect DB
@@ -22,7 +21,7 @@ def get_data_year(engineDB):
     # query 
     query = f'''
     SELECT DISTINCT "Year"
-    FROM {INCOMES_TABLE}'
+    FROM {INCOME_TABLE}'
     ORDER BY "Year"'
     '''
 
@@ -46,48 +45,42 @@ def get_years():
 # get data DB
 def get_income(engineDB, year, id_city=None, id_province=None, id_region=None, normalized='no'):
     #name_table = year + INCOMES_TABLE
-    #name_table_pop = year + POPULATION_TABLE
-    
     # query 
-    query = f'''
-    WITH year_pop AS
-    (
-    SELECT pop.Id_city, SUM(pop.Total) Total_pop
-    FROM "{POPULATION_TABLE}" pop
-    WHERE pop."Year" = {year}
-    GROUP BY pop.Id_city
-    )
-    '''
-
     if normalized == 'no':
-        query = query + f'''
+        query = f'''
         SELECT i.Id_city , c.City ,
             c.Id_province , p.Province ,
             p.Id_region , r.Region , 
-            i.Id_indicator, ii.Name_indicator ,
-            i."Year",
-            i.Total,
-            po.Total_pop 
+            i."Year",            
+            i.Owners,
+            i.Declarations,
+            i.Population,
+            i.National_position,
+            i.Region_position,
+            i.Avg_gross_income,
+            i.Avg_net_income
         '''
     else:
-        query = query + f'''
+        query = f'''
         SELECT i.Id_city ,
             c.Id_province ,
             p.Id_region , 
-            i.Id_indicator,
-            i."Year",
-            i.Total,
-            po.Total_pop 
+            i."Year",            
+            i.Owners,
+            i.Declarations,
+            i.Population,
+            i.National_position,
+            i.Region_position,
+            i.Avg_gross_income,
+            i.Avg_net_income
         '''
         
     # from
     query = query + f'''
-        FROM "{INCOMES_TABLE}" i
+        FROM "{INCOME_TABLE}" i
             INNER JOIN CITY c ON c.Id_city = i.Id_city  
             INNER JOIN PROVINCE p ON p.Id_province = c.Id_province 
             INNER JOIN REGION r ON r.Id_region = p.Id_region
-            INNER JOIN year_pop po ON po.Id_city = i.Id_city 
-            INNER JOIN INDICATOR_INCOME ii ON ii.Id_indicator = i.Id_indicator 
         WHERE 1 = 1
             AND i."Year" = {year}
         '''
@@ -109,7 +102,6 @@ def get_income(engineDB, year, id_city=None, id_province=None, id_region=None, n
         query = query + f'''
          AND r.Id_region = '{id_region}'
         '''
-
     #print(query)
 
     try:
