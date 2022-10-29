@@ -38,38 +38,38 @@ def get_api_regions():
     return d
 
 def get_api_indicators_incomes():
-    df = pd.read_json(URL_API + '/indicators_income')
+    df = pd.read_json(URL_API + '/indicators-income-ine')
     d = df['Name_indicator']
     return d
 
 # get population INE
 #@st.cache(show_spinner=False)
-def get_api_population_ine(year, age):
+def get_api_population_ine(year, age='yes'):
     if age == OPTION_NO:
         age = 'no'
     if age == OPTION_YES:
         age = 'yes'
-    url = URL_API + f'/population_ine/{year}?age={age}'
+    url = URL_API + f'/population-ine/cities/year/{year}?age={age}'
     df = pd.read_json(url)
     return df
 
 # get incomes INE
 #@st.cache(show_spinner=False)
 def get_api_incomes_ine(year):
-    url = URL_API + f'/income_ine/{year}'
+    url = URL_API + f'/income-ine/cities/year/{year}'
     df = pd.read_json(url)
     return df
 
 # get incomes AEAT
 #@st.cache(show_spinner=False)
 def get_api_incomes_aeat(year):
-    url = URL_API + f'/income_aeat/{year}'
+    url = URL_API + f'/income-aeat/cities/year/{year}'
     df = pd.read_json(url)
     return df
 
 # get years incomes AEAT
 def get_api_incomes_aeat_years():
-    url = URL_API + f'/income_aeat/years'
+    url = URL_API + f'/income-aeat/years'
     df = pd.read_json(url)
     if df.empty:
         #return 0, 1
@@ -84,7 +84,7 @@ def get_api_incomes_aeat_years():
 
 # get years incomes INE
 def get_api_incomes_ine_years():
-    url = URL_API + f'/income_ine/years'
+    url = URL_API + f'/income-ine/years'
     df = pd.read_json(url)
     if df.empty:
         #return 0, 1
@@ -99,7 +99,7 @@ def get_api_incomes_ine_years():
 
 # get years population INE
 def get_api_population_ine_years():
-    url = URL_API + f'/population_ine/years'
+    url = URL_API + f'/population-ine/years'
     df = pd.read_json(url)
     if df.empty:
         #return 0, 1
@@ -160,23 +160,153 @@ def build_graph_incomes_aeat(df):
                   row=1, col=2
     )
     fig.update_layout(height=400, width=800, showlegend=False)
+    fig.update_xaxes(tickangle=45)
     list_fig.append(fig)
 
     return list_fig
 
+def avg_age_population(df):
+    df_out = df.copy()
+    df_out['Total_age'] = df_out['Female_0'] * 0 + df_out['Male_0'] * 0 + \
+                    df_out['Female_1'] * 1 + df_out['Male_1'] * 1 + \
+                    df_out['Female_2'] * 2 + df_out['Male_2'] * 2 + \
+                    df_out['Female_3'] * 3 + df_out['Male_3'] * 3 + \
+                    df_out['Female_4'] * 4 + df_out['Male_4'] * 4 + \
+                    df_out['Female_5'] * 5 + df_out['Male_5'] * 5 + \
+                    df_out['Female_6'] * 6 + df_out['Male_6'] * 6 + \
+                    df_out['Female_7'] * 7 + df_out['Male_7'] * 7 + \
+                    df_out['Female_8'] * 8 + df_out['Male_8'] * 8 + \
+                    df_out['Female_9'] * 9 + df_out['Male_9'] * 9 + \
+                    df_out['Female_10'] * 10 + df_out['Male_10'] * 10 + \
+                    df_out['Female_11'] * 11 + df_out['Male_11'] * 11 + \
+                    df_out['Female_12'] * 12 + df_out['Male_12'] * 12 + \
+                    df_out['Female_13'] * 13 + df_out['Male_13'] * 13 + \
+                    df_out['Female_14'] * 14 + df_out['Male_14'] * 14 + \
+                    df_out['Female_15'] * 15 + df_out['Male_15'] * 15 + \
+                    df_out['Female_16'] * 16 + df_out['Male_16'] * 16 + \
+                    df_out['Female_17'] * 17 + df_out['Male_17'] * 17 + \
+                    df_out['Female_18'] * 18 + df_out['Male_18'] * 18 + \
+                    df_out['Female_19'] * 19 + df_out['Male_19'] * 19 + \
+                    df_out['Female_20'] * 20 + df_out['Male_20'] * 20 + \
+                    df_out['Female_21'] * 21 + df_out['Male_21'] * 21 + \
+                    df_out['Female_22'] * 22 + df_out['Male_22'] * 22 + \
+                    df_out['Female_23'] * 23 + df_out['Male_23'] * 23 + \
+                    df_out['Female_24'] * 24 + df_out['Male_24'] * 24 + \
+                    df_out['Female_25'] * 25 + df_out['Male_25'] * 25 + \
+                    df_out['Female_26'] * 26 + df_out['Male_26'] * 26 + \
+                    df_out['Female_27'] * 27 + df_out['Male_27'] * 27 + \
+                    df_out['Female_28'] * 28 + df_out['Male_28'] * 28 + \
+                    df_out['Female_29'] * 29 + df_out['Male_29'] * 29 + \
+                    df_out['Female_30'] * 30 + df_out['Male_30'] * 30 + \
+                    df_out['Female_31'] * 31 + df_out['Male_31'] * 31 + \
+                    df_out['Female_32'] * 32 + df_out['Male_32'] * 32 + \
+                    df_out['Female_33'] * 33 + df_out['Male_33'] * 33 + \
+                    df_out['Female_34'] * 34 + df_out['Male_34'] * 34 + \
+                    df_out['Female_35'] * 35 + df_out['Male_35'] * 35 + \
+                    df_out['Female_36'] * 36 + df_out['Male_36'] * 36 + \
+                    df_out['Female_37'] * 37 + df_out['Male_37'] * 37 + \
+                    df_out['Female_38'] * 38 + df_out['Male_38'] * 38 + \
+                    df_out['Female_39'] * 39 + df_out['Male_39'] * 39 + \
+                    df_out['Female_40'] * 40 + df_out['Male_40'] * 40 + \
+                    df_out['Female_41'] * 41 + df_out['Male_41'] * 41 + \
+                    df_out['Female_42'] * 42 + df_out['Male_42'] * 42 + \
+                    df_out['Female_43'] * 43 + df_out['Male_43'] * 43 + \
+                    df_out['Female_44'] * 44 + df_out['Male_44'] * 44 + \
+                    df_out['Female_45'] * 45 + df_out['Male_45'] * 45 + \
+                    df_out['Female_46'] * 46 + df_out['Male_46'] * 46 + \
+                    df_out['Female_47'] * 47 + df_out['Male_47'] * 47 + \
+                    df_out['Female_48'] * 48 + df_out['Male_48'] * 48 + \
+                    df_out['Female_49'] * 49 + df_out['Male_49'] * 49 + \
+                    df_out['Female_50'] * 50 + df_out['Male_50'] * 50 + \
+                    df_out['Female_51'] * 51 + df_out['Male_51'] * 51 + \
+                    df_out['Female_52'] * 52 + df_out['Male_52'] * 52 + \
+                    df_out['Female_53'] * 53 + df_out['Male_53'] * 53 + \
+                    df_out['Female_54'] * 54 + df_out['Male_54'] * 54 + \
+                    df_out['Female_55'] * 55 + df_out['Male_55'] * 55 + \
+                    df_out['Female_56'] * 56 + df_out['Male_56'] * 56 + \
+                    df_out['Female_57'] * 57 + df_out['Male_57'] * 57 + \
+                    df_out['Female_58'] * 58 + df_out['Male_58'] * 58 + \
+                    df_out['Female_59'] * 59 + df_out['Male_59'] * 59 + \
+                    df_out['Female_60'] * 60 + df_out['Male_60'] * 60 + \
+                    df_out['Female_61'] * 61 + df_out['Male_61'] * 61 + \
+                    df_out['Female_62'] * 62 + df_out['Male_62'] * 62 + \
+                    df_out['Female_63'] * 63 + df_out['Male_63'] * 63 + \
+                    df_out['Female_64'] * 64 + df_out['Male_64'] * 64 + \
+                    df_out['Female_65'] * 65 + df_out['Male_65'] * 65 + \
+                    df_out['Female_66'] * 66 + df_out['Male_66'] * 66 + \
+                    df_out['Female_67'] * 67 + df_out['Male_67'] * 67 + \
+                    df_out['Female_68'] * 68 + df_out['Male_68'] * 68 + \
+                    df_out['Female_69'] * 69 + df_out['Male_69'] * 69 + \
+                    df_out['Female_70'] * 70 + df_out['Male_70'] * 70 + \
+                    df_out['Female_71'] * 71 + df_out['Male_71'] * 71 + \
+                    df_out['Female_72'] * 72 + df_out['Male_72'] * 72 + \
+                    df_out['Female_73'] * 73 + df_out['Male_73'] * 73 + \
+                    df_out['Female_74'] * 74 + df_out['Male_74'] * 74 + \
+                    df_out['Female_75'] * 75 + df_out['Male_75'] * 75 + \
+                    df_out['Female_76'] * 76 + df_out['Male_76'] * 76 + \
+                    df_out['Female_77'] * 77 + df_out['Male_77'] * 77 + \
+                    df_out['Female_78'] * 78 + df_out['Male_78'] * 78 + \
+                    df_out['Female_79'] * 79 + df_out['Male_79'] * 79 + \
+                    df_out['Female_80'] * 80 + df_out['Male_80'] * 80 + \
+                    df_out['Female_81'] * 81 + df_out['Male_81'] * 81 + \
+                    df_out['Female_82'] * 82 + df_out['Male_82'] * 82 + \
+                    df_out['Female_83'] * 83 + df_out['Male_83'] * 83 + \
+                    df_out['Female_84'] * 84 + df_out['Male_84'] * 84 + \
+                    df_out['Female_85'] * 85 + df_out['Male_85'] * 85 + \
+                    df_out['Female_86'] * 86 + df_out['Male_86'] * 86 + \
+                    df_out['Female_87'] * 87 + df_out['Male_87'] * 87 + \
+                    df_out['Female_88'] * 88 + df_out['Male_88'] * 88 + \
+                    df_out['Female_89'] * 89 + df_out['Male_89'] * 89 + \
+                    df_out['Female_90'] * 90 + df_out['Male_90'] * 90 + \
+                    df_out['Female_91'] * 91 + df_out['Male_91'] * 91 + \
+                    df_out['Female_92'] * 92 + df_out['Male_92'] * 92 + \
+                    df_out['Female_93'] * 93 + df_out['Male_93'] * 93 + \
+                    df_out['Female_94'] * 94 + df_out['Male_94'] * 94 + \
+                    df_out['Female_95'] * 95 + df_out['Male_95'] * 95 + \
+                    df_out['Female_96'] * 96 + df_out['Male_96'] * 96 + \
+                    df_out['Female_97'] * 97 + df_out['Male_97'] * 97 + \
+                    df_out['Female_98'] * 98 + df_out['Male_98'] * 98 + \
+                    df_out['Female_99'] * 99 + df_out['Male_99'] * 99 + \
+                    df_out['Female_100'] * 100 + df_out['Male_100'] * 100 
+    df_out['Avg_age'] = df_out['Total_age'] / df_out['Total']
+
+    return df_out
+
 # build graph pop ine
-def build_graph_population_ine(df):
+def build_graph_population_ine(df, selected_age=OPTION_YES):
     list_fig = []
     # graph 1
-    fig = make_subplots(rows=1, cols=2, subplot_titles=('Top 5 cities female population',  'Top 5 cities male population'))
-    fig.add_trace(go.Bar(x=df.nlargest(5, 'Total_F')['City'], y=df.nlargest(5, 'Total_F')['Total_F']),
-                 row=1, col=1
-    )
-    fig.add_trace(go.Bar(x=df.nlargest(5, 'Total_M')['City'], y=df.nlargest(5, 'Total_M')['Total_M']),
-                  row=1, col=2
-    )
-    fig.update_layout(height=400, width=800, showlegend=False)
+    data = df.sort_values(by='Total', ascending=False).head(10).rename(columns={'Total_F': 'Female', 'Total_M': 'Male'})
+    fig = px.bar(data,
+                 x='City', 
+                 y=['Total', 'Female', 'Male'])
+    fig.update_layout(height=400, 
+                      width=800, 
+                      title_text='Top cities population', title_x=0.5, 
+                      barmode='group',
+                      legend_title_text='Gender', )
+    fig.update_xaxes(tickangle=45)
     list_fig.append(fig)
+    if selected_age == OPTION_YES:
+        # graph 2
+        data = avg_age_population(df)
+        data = data.groupby('Province')[['Avg_age']].mean().reset_index()
+        fig = make_subplots(rows=1, 
+                            cols=2,
+                            subplot_titles=('Youngest provinces', 'Oldest provinces'))
+        fig.add_trace(go.Bar(x=data.sort_values(by='Avg_age').head(5)['Province'], 
+                            y=data.sort_values(by='Avg_age').head(5)['Avg_age']),
+                            row=1, col=1)
+        fig.add_trace(go.Bar(x=data.sort_values(by='Avg_age').tail(5)['Province'], 
+                            y=data.sort_values(by='Avg_age').tail(5)['Avg_age']),
+                            row=1, col=2)
+        fig.update_layout(height=400, 
+                        width=800, 
+                        showlegend=False, 
+                        title_text='Average age', title_x=0.5)
+        fig.update_yaxes(range=[0, 70]) 
+        fig.update_xaxes(tickangle=45)       
+        list_fig.append(fig)
 
     return list_fig
 
@@ -200,32 +330,33 @@ def build_graph_incomes_ine(df):
                       showlegend=False, 
                       title_text='Average net income per person (EUR)', title_x=0.5)
     fig.update_yaxes(range=[0, 35000])
+    fig.update_xaxes(tickangle=45)
     list_fig.append(fig)
     
     # graph 2
     data = df.loc[df['Id_city'] == data.nlargest(1, 'Total').iloc[0]['Id_city']]
     fig = px.bar(data,
-                x='City', 
-                y='Total',
-                color='Name_indicator',
-                barmode='group')
+                 x='City', 
+                 y='Total',
+                 color='Name_indicator',
+                 barmode='group')
     fig.update_layout(height=400, 
                       width=800, 
-                      title_text='Top city (population >1000)',
+                      title_text='Top city (population >1000)', 
                       legend_title_text='Indicator income (EUR)')
     list_fig.append(fig)
 
     return list_fig
 
 # get graph
-def get_plot(type, df):
+def get_plot(type, df, selected_age=OPTION_YES):
     list_fig = []
     if df.empty:
         fig = make_subplots(rows=1, cols=1)
         list_fig.append(fig)
     else:
         if type == type_population_ine:
-            list_fig = build_graph_population_ine(df)
+            list_fig = build_graph_population_ine(df, selected_age)
         elif type ==type_income_ine:
             list_fig = build_graph_incomes_ine(df)
         elif type ==type_income_aeat:
@@ -294,12 +425,12 @@ def play_population_ine():
     #selected_year_p = st.slider('Year: ', min_value=min_y_p, max_value=max_y_p, key='year_pop_ine')
     list_years_pop_i = get_api_population_ine_years()
     selected_year_p = st.radio('Year: ', list_years_pop_i, key='year_pop_ine', horizontal=True)
-    selecter_age = st.radio('By age:', [OPTION_NO, OPTION_YES])
+    #selected_age = st.radio('By age:', [OPTION_NO, OPTION_YES])
     #select_cities = st.selectbox('City: ', get_api_cities())
     
     # get data
     with st.spinner('Loading...'):
-        df_pop = get_api_population_ine(selected_year_p, selecter_age)
+        df_pop = get_api_population_ine(selected_year_p)
         
         f_csv = export_to_csv(df_pop, ENCODE)
 
