@@ -130,7 +130,7 @@ dmypy.json
 
 # data folders
 data/
-db/
+# to heroku db/
 
 # notebooks folders
 notebooks/
