@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_autodoc.autodoc import Autodoc
 from flask import request
+from flask import jsonify
 from modules.get import get_dimensions as dim
 from modules.get import get_income_ine as income_ine
 from modules.get import get_population_ine as pop_ine
@@ -15,6 +16,7 @@ auto = Autodoc(app)
 @app.route('/')
 def ini():
     return 'Collect'
+
 
 
 ###############
@@ -103,7 +105,7 @@ def api_income_aeat_city(year, id_city=None):
 
 # get income aeat for cities for a year
 @auto.doc()
-@app.route('/income-aeat/cities/province/<id_province>/year/<year>', methods = ['GET'])
+@app.route('/income-aeat/province/<id_province>/cities/year/<year>', methods = ['GET'])
 def api_income_aeat_city_pronvince(year, id_province=None):
     ''' Get income in Spain by AEAT for every available city for specific province in a year'''
     
@@ -117,7 +119,7 @@ def api_income_aeat_city_pronvince(year, id_province=None):
 
 # get income aeat for cities for a year
 @auto.doc()
-@app.route('/income-aeat/cities/region/<id_region>/year/<year>', methods = ['GET'])
+@app.route('/income-aeat/region/<id_region>/cities/year/<year>', methods = ['GET'])
 def api_income_aeat_city_region(year, id_region=None):
     ''' Get income in Spain by AEAT for every available city for specific region in a year'''
     
@@ -156,8 +158,9 @@ def api_incomes_ine_every_city(year):
     
     # get data
     data = income_ine.get_incomes(year=year, normalized=id_normalized)
-
-    return data
+    json_data = jsonify(data)
+    
+    return json_data
 
 # get income ine for cities for a year
 @auto.doc()
@@ -175,7 +178,7 @@ def api_incomes_ine_city(year, id_city=None):
 
 # get income ine for cities for a year
 @auto.doc()
-@app.route('/income-ine/cities/province/<id_province>/year/<year>', methods = ['GET'])
+@app.route('/income-ine/province/<id_province>/cities/year/<year>', methods = ['GET'])
 def api_incomes_ine_city_province(year, id_province=None):
     ''' Get income in Spain by INE for every available city for specific province in a year'''
     
@@ -189,7 +192,7 @@ def api_incomes_ine_city_province(year, id_province=None):
 
 # get income ine for cities for a year
 @auto.doc()
-@app.route('/income-ine/cities/region/<id_region>/year/<year>', methods = ['GET'])
+@app.route('/income-ine/region/<id_region>/cities/year/<year>', methods = ['GET'])
 def api_incomes_ine_city_region(year, id_region=None):
     ''' Get income in Spain by INE for every available city for specific region in a year'''
     
@@ -249,7 +252,7 @@ def api_population_ine_city(year, id_city=None):
 
 # get population ine for cities for a year
 @auto.doc()
-@app.route('/population-ine/cities/province/<id_province>/year/<year>', methods = ['GET'])
+@app.route('/population-ine/province/<id_province>/cities/year/<year>', methods = ['GET'])
 def api_population_ine_city_province(year, id_province=None):
     ''' Get population in Spain by INE for every available city for specific province in a year'''
     
@@ -264,7 +267,7 @@ def api_population_ine_city_province(year, id_province=None):
 
 # get population ine for cities for a year
 @auto.doc()
-@app.route('/population-ine/cities/region/<id_region>/year/<year>', methods = ['GET'])
+@app.route('/population-ine/region/<id_region>/cities/year/<year>', methods = ['GET'])
 def api_population_ine_city_region(year, id_region=None):
     ''' Get population in Spain by INE for every available city for specific region in a year'''
     
@@ -277,18 +280,6 @@ def api_population_ine_city_region(year, id_region=None):
 
     return data
 
-
-
-
-
-
-################# group by 
-################################
-################################
-################################
-################################
-
-
 # get population ine for provinces for a year
 @auto.doc()
 @app.route('/population-ine/provinces/year/<year>', methods = ['GET'])
@@ -300,7 +291,7 @@ def api_population_ine_every_province(year):
     id_age = request.args.get('age', 'no', type=str)
     
     # get data
-    data = pop_ine.get_population(year=year, age=id_age, normalized=id_normalized)
+    data = pop_ine.get_population(year=year, age=id_age, gr_province='yes', normalized=id_normalized)
     
     return data
 
@@ -315,13 +306,13 @@ def api_population_ine_province(year, id_province=None):
     id_age = request.args.get('age', 'no', type=str)
     
     # get data
-    data = pop_ine.get_population(year=year, id_province=id_province, age=id_age, normalized=id_normalized)
+    data = pop_ine.get_population(year=year, id_province=id_province, age=id_age, gr_province='yes', normalized=id_normalized)
     
     return data
 
 # get population ine for provinces for a year
 @auto.doc()
-@app.route('/population-ine/provinces/region/<id_region>/year/<year>', methods = ['GET'])
+@app.route('/population-ine/region/<id_region>/provinces/year/<year>', methods = ['GET'])
 def api_population_ine_province_region(year, id_region=None):
     ''' Get population in Spain by INE for every available province for specific region in a year'''
     
@@ -330,7 +321,7 @@ def api_population_ine_province_region(year, id_region=None):
     id_age = request.args.get('age', 'no', type=str)
     
     # get data
-    data = pop_ine.get_population(year=year, id_region=id_region, age=id_age, normalized=id_normalized)
+    data = pop_ine.get_population(year=year, id_region=id_region, age=id_age, gr_province='yes', normalized=id_normalized)
     
     return data
 
@@ -345,7 +336,7 @@ def api_population_ine_every_region(year):
     id_age = request.args.get('age', 'no', type=str)
     
     # get data
-    data = pop_ine.get_population(year=year, age=id_age, normalized=id_normalized)
+    data = pop_ine.get_population(year=year, age=id_age, gr_region='yes', normalized=id_normalized)
 
     return data
 
@@ -360,7 +351,7 @@ def api_population_ine_region(year, id_region=None):
     id_age = request.args.get('age', 'no', type=str)
     
     # get data
-    data = pop_ine.get_population(year=year, id_region=id_region, age=id_age, normalized=id_normalized)
+    data = pop_ine.get_population(year=year, id_region=id_region, age=id_age, gr_region='yes', normalized=id_normalized)
 
     return data
 
@@ -375,8 +366,3 @@ def api_population_ine_region(year, id_region=None):
 def documentation():
     # html
     return auto.html()
-    
-
-
-if __name__ == '__main__':
-    app.run(port=9080)

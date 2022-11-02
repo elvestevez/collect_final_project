@@ -1,0 +1,263 @@
+[
+    {
+        "endpoint": "/cities",
+        "description": "Get the available cities in Spain",
+        "methods": "GET",
+        "path-args": [],
+        "query-args": [],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/cities"
+    },
+    {
+        "endpoint": "/provinces",
+        "description": "Get the available provinces in Spain",
+        "methods": "GET",
+        "path-args": [],
+        "query-args": [],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/provinces"
+    },
+    {
+        "endpoint": "/regions",
+        "description": "Get the available regions in Spain",
+        "methods": "GET",
+        "path-args": [],
+        "query-args": [],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/regions"
+    },
+    {
+        "endpoint": "/indicators-income-ine",
+        "description": "Get the available indicators income by INE",
+        "methods": "GET",
+        "path-args": [],
+        "query-args": [],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/indicators-income-ine"
+    },
+    {
+        "endpoint": "/income-ine/years",
+        "description": "Get the available years for income in Spain by INE",
+        "methods": "GET",
+        "path-args": [],
+        "query-args": [],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-ine/years"
+    },
+    {
+        "endpoint": "/income-ine/cities/year/<year>",
+        "description": "Get income in Spain by INE for every available city in a year",
+        "methods": "GET",
+        "path-args": [{"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-ine/cities/year/2020"
+    },
+    {
+        "endpoint": "/income-ine/city/<id_city>/year/<year>",
+        "description": "Get income in Spain by INE for specific city in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_city", "description": "Selected city id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-ine/city/28089/year/2020"
+    },
+    {
+        "endpoint": "/income-ine/province/<id_province>/cities/year/<year>",
+        "description": "Get income in Spain by INE for every available city for specific province in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_province", "description": "Selected province id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-ine/province/03/cities/year/2020"
+    },
+    {
+        "endpoint": "/income-ine/region/<id_region>/cities/year/<year>",
+        "description": "Get income in Spain by INE for every available city for specific region in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_region", "description": "Selected region id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-ine/region/06/cities/year/2020"
+    },
+    {
+        "endpoint": "/population-ine/years",
+        "description": "Get the available years for population in Spain by INE",
+        "methods": "GET",
+        "path-args": [],
+        "query-args": [],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/years"
+    },
+    {
+        "endpoint": "/population-ine/cities/year/<year>",
+        "description": "Get population in Spain by INE for every available city in a year",
+        "methods": "GET",
+        "path-args": [{"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"},
+                       {"id": "age", "description": "Distribution by age. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/cities/year/2020"
+    },
+    {
+        "endpoint": "/population-ine/city/<id_city>/year/<year>",
+        "description": "Get population in Spain by INE for specific city in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_city", "description": "Selected city id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"},
+                       {"id": "age", "description": "Distribution by age. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/city/28089/year/2020"
+    },
+    {
+        "endpoint": "/population-ine/province/<id_province>/cities/year/<year>",
+        "description": "Get population in Spain by INE for every available city for specific province in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_province", "description": "Selected province id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"},
+                       {"id": "age", "description": "Distribution by age. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/province/11/cities/year/2020"
+    },
+    {
+        "endpoint": "/population-ine/region/<id_region>/cities/year/<year>",
+        "description": "Get population in Spain by INE for every available city for specific region in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_region", "description": "Selected region id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"},
+                       {"id": "age", "description": "Distribution by age. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/region/02/cities/year/2020"
+    },
+    {
+        "endpoint": "/population-ine/provinces/year/<year>",
+        "description": "Get population in Spain by INE for every available province in a year",
+        "methods": "GET",
+        "path-args": [{"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"},
+                       {"id": "age", "description": "Distribution by age. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/provinces/year/2020"
+    },
+    {
+        "endpoint": "/population-ine/province/<id_province>/year/<year>",
+        "description": "Get population in Spain by INE for specific province in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_province", "description": "Selected province id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"},
+                       {"id": "age", "description": "Distribution by age. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/province/07/year/2020"
+    },
+    {
+        "endpoint": "/population-ine/region/<id_region>/provinces/year/<year>",
+        "description": "Get population in Spain by INE for every available province for specific region in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_region", "description": "Selected region id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"},
+                       {"id": "age", "description": "Distribution by age. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/region/01/provinces/year/2020"
+    },
+    {
+        "endpoint": "/population-ine/regions/year/<year>",
+        "description": "Get population in Spain by INE for every available region in a year",
+        "methods": "GET",
+        "path-args": [{"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"},
+                       {"id": "age", "description": "Distribution by age. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/regions/year/2020"
+    },
+    {
+        "endpoint": "/population-ine/region/<id_region>/year/<year>",
+        "description": "Get population in Spain by INE for specific region in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_region", "description": "Selected region id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"},
+                       {"id": "age", "description": "Distribution by age. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/population-ine/region/10/year/2020"
+    },
+    {
+        "endpoint": "/income-aeat/years",
+        "description": "Get the available years for income in Spain by AEAT",
+        "methods": "GET",
+        "path-args": [],
+        "query-args": [],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-aeat/years"
+    },
+    {
+        "endpoint": "/income-aeat/cities/year/<year>",
+        "description": "Get income in Spain by AEAT for every available city in a year",
+        "methods": "GET",
+        "path-args": [{"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-aeat/cities/year/2020"
+    },
+    {
+        "endpoint": "/income-aeat/city/<id_city>/year/<year>",
+        "description": "Get income in Spain by AEAT for specific city in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_city", "description": "Selected city id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-aeat/city/28089/year/2020"
+    },
+    {
+        "endpoint": "/income-aeat/province/<id_province>/cities/year/<year>",
+        "description": "Get income in Spain by AEAT for every available city for specific province in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_province", "description": "Selected province id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-aeat/province/49/cities/year/2020"
+    },
+    {
+        "endpoint": "/income-aeat/region/<id_region>/cities/year/<year>",
+        "description": "Get income in Spain by AEAT for every available city for specific region in a year",
+        "methods": "GET",
+        "path-args": [{"id": "id_region", "description": "Selected region id"},
+                      {"id": "year", "description": "Selected year"}],
+        "query-args": [{"id": "normalized", "description": "Data normalization. no (default) / yes"}],
+        "return": [{"id": "data", "description": "Data info"},
+                   {"id": "metadata", "description": "Metadata info"}],
+        "example": "http://localhost:9080/income-aeat/region/17/cities/year/2020"
+    }    
+]

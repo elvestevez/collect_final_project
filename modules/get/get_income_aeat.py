@@ -3,10 +3,12 @@ from sqlalchemy import create_engine
 from sqlalchemy import inspect
 import pandas as pd
 import json
+import configparser
+
 
 DB_SQLITE = './db/db_collect.db'
-
 INCOME_TABLE = 'INCOME_AEAT'
+CONFIG_FILE = './datatype.properties'
 
 
 # connect DB
@@ -28,23 +30,32 @@ def get_data_year(engineDB):
     #print(query)
 
     try:
-        json_data = pd.read_sql_query(query, engineDB).to_json()
+        dict_data = pd.read_sql_query(query, engineDB).to_dict(orient='records')
     except:
-        json_data = '{}'
+        dict_data = {}
     
-    return json_data
+    return dict_data
 
-# get years
+# get years for incomes
 def get_years():
     # connect
     engineDB = connect_DB()
-    # select
-    result = get_data_year(engineDB)
+    
+    # select data
+    result_data = get_data_year(engineDB)
+    # build metadata
+    result_metadata = get_income_metadata(result_data, 'YEAR')
+    
+    # set final result
+    result = {}
+    result['data'] = result_data
+    result['metadata'] = result_metadata
+
     return result
+    
 
 # get data DB
-def get_income(engineDB, year, id_city=None, id_province=None, id_region=None, normalized='no'):
-    #name_table = year + INCOMES_TABLE
+def get_income_data(engineDB, year, id_city=None, id_province=None, id_region=None, normalized='no'):
     # query 
     if normalized == 'no':
         query = f'''
@@ -105,16 +116,53 @@ def get_income(engineDB, year, id_city=None, id_province=None, id_region=None, n
     #print(query)
 
     try:
-        json_data = pd.read_sql_query(query, engineDB).to_json()
+        dict_data = pd.read_sql_query(query, engineDB).to_dict(orient='records')
     except:
-        json_data = '{}'
+        dict_data = {}
     
-    return json_data
+    return dict_data
+
+# get type and description of columns
+def get_income_metadata(data, name):
+    # def type info
+    info = name
+    # get properties file
+    config = configparser.ConfigParser()
+    config.read(CONFIG_FILE)
+    # convert to df
+    df = pd.DataFrame(data)
+    # get cols of df
+    cols = df.columns
+    list_datatype = []
+    # every col
+    for c in cols:
+        dict_datatype = {}
+        # id
+        dict_datatype['id'] = c
+        if config.has_option(info, c):
+            # get type
+            dict_datatype['type'] = json.loads(config.get(info, c))['type']
+            # get text
+            dict_datatype['description'] = json.loads(config.get(info, c))['text']
+            list_datatype.append(dict_datatype)
+    
+    dict_datatype = pd.DataFrame(list_datatype).to_dict(orient='records')
+    
+    return dict_datatype
 
 # get incomes by city
 def get_incomes(year, id_city=None, id_province=None, id_region=None, normalized='no'):
     # connect
     engineDB = connect_DB()
-    # select
-    result = get_income(engineDB, year, id_city, id_province, id_region, normalized)
+    
+    # select data
+    result_data = get_income_data(engineDB, year, id_city, id_province, id_region, normalized)
+    # build metadata
+    result_metadata = get_income_metadata(result_data, 'income_aeat')
+    
+    # set final result
+    result = {}
+    result['data'] = result_data
+    result['metadata'] = result_metadata
+
     return result
