@@ -1,0 +1,8 @@
+#requirements.txt
+
+gunicorn
+flask
+sqlalchemy
+pandas
+json
+configparser
